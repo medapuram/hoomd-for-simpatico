@@ -1,0 +1,107 @@
+/*
+Highly Optimized Object-oriented Many-particle Dynamics -- Blue Edition
+(HOOMD-blue) Open Source Software License Copyright 2008-2011 Ames Laboratory
+Iowa State University and The Regents of the University of Michigan All rights
+reserved.
+
+HOOMD-blue may contain modifications ("Contributions") provided, and to which
+copyright is held, by various Contributors who have granted The Regents of the
+University of Michigan the right to modify and/or distribute such Contributions.
+
+You may redistribute, use, and create derivate works of HOOMD-blue, in source
+and binary forms, provided you abide by the following conditions:
+
+* Redistributions of source code must retain the above copyright notice, this
+list of conditions, and the following disclaimer both in the code and
+prominently in any materials provided with the distribution.
+
+* Redistributions in binary form must reproduce the above copyright notice, this
+list of conditions, and the following disclaimer in the documentation and/or
+other materials provided with the distribution.
+
+* All publications and presentations based on HOOMD-blue, including any reports
+or published results obtained, in whole or in part, with HOOMD-blue, will
+acknowledge its use according to the terms posted at the time of submission on:
+http://codeblue.umich.edu/hoomd-blue/citations.html
+
+* Any electronic documents citing HOOMD-Blue will link to the HOOMD-Blue website:
+http://codeblue.umich.edu/hoomd-blue/
+
+* Apart from the above required attributions, neither the name of the copyright
+holder nor the names of HOOMD-blue's contributors may be used to endorse or
+promote products derived from this software without specific prior written
+permission.
+
+Disclaimer
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER AND CONTRIBUTORS ``AS IS'' AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND/OR ANY
+WARRANTIES THAT THIS SOFTWARE IS FREE OF INFRINGEMENT ARE DISCLAIMED.
+
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+
+/*! \page page_units Units
+
+<h2>Units used in HOOMD-blue</h2>
+
+HOOMD-blue stores and computes all values in a system of generic, but fully self-consistent set of units. In this
+manner, no conversion factors need to be maintained and applied to values at every step. For example, a value with units
+of force just naturally arises from dividing an energy by a distance. You may be familiar with this system of units
+as being referred to as reduced "Lennard-Jones" units. However, these will be more formally generalized here for
+application to all types of potentials in HOOMD-blue.
+
+<hr>
+<h2>Fundamental Units</h2>
+
+The three fundamental units are:
+ - distance - \f$D_u\f$
+ - energy - \f$E_u\f$
+ - mass - \f$M_u\f$
+
+All other units that appear in HOOMD-blue are derived from these. Values can be converted into any other system
+of units by assigning the desired units to \f$D_u\f$, \f$E_u\f$, and \f$M_u\f$ and then multiplying by the resulting
+conversion factors.
+
+<i>A note on numerics</i>: Floating point calculations are most precise when values are close to unity. Thus, it is
+generally best to choose a scale where energy well depths and particle masses are near 1. Similarly, it is also best
+for typical particle diameters to also be chosen near 1.
+
+<hr>
+<h2>Temperature (thermal energy)</h2>
+
+Temperature notes special attention. The nomenclature in the literature regarding Lennard-Jones "reduced temperature"
+is generally not very precise or consistent. HOOMD-blue's parameter names unfortunately don't do anything to help that
+(maybe a later version will fix this). Formally, whenever HOOMD-blue asks for or reports a "temperature" \f$T\f$, the
+value is actually a thermal energy \f$T = k_\mathrm{B} T_\mathrm{real}\f$ <i>in units of energy</i>. The value of
+\f$k_\mathrm{B}\f$ is uniquely determined by your choice of real units for distance, energy, and mass.
+
+<hr>
+<h2>Charge</h2>
+
+Charge also requires careful consideration. The unit of charge used in HOOMD-blue is also reduced, but cannot be
+completely represented using the 3 fundamental units - the permittivity of free space \f$ \varepsilon_0 \f$  also enters
+into the conversion, as does a scaling factor.
+
+Specifically, the units of charge are: \f$ (4 \pi \varepsilon_0 D_u E_u)^{1/2} \f$. Divide a given charge by this
+quantity to convert it into simulation units.
+
+<hr>
+<h2>Common derived units</h2>
+Here is a list of some commonly used derived units and how they relate to the fundamental ones.
+ - time - \f$t_u = \sqrt{\frac{M_u D_u^2}{E_u}}\f$
+ - volume - \f$ D_u^3 \f$
+ - velocity - \f$ \frac{D_u}{t_u}\f$
+ - momentum - \f$ M_u \frac{D_u}{t_u} \f$
+ - acceleration - \f$ \frac{D_u}{t_u^2}\f$
+ - force - \f$ \frac{E_u}{D_u} \f$
+ - pressure - \f$ \frac{E_u}{D_u^3} \f$
+
+*/

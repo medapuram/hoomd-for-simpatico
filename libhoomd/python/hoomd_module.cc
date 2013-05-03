@@ -434,7 +434,7 @@ BOOST_PYTHON_MODULE(hoomd)
     export_NeighborListBinned();
     export_ConstraintSphere();
     export_PPPMForceCompute();
-    export_PotentialExternal<PotentialExternalPeriodic>("PotentialExternalPeriodic");
+    export_PotentialExternal<PotentialPeriodicExternal>("PotentialPeriodicExternal");
 #ifdef ENABLE_CUDA
     export_CellListGPU();
     export_NeighborListGPU();
@@ -464,7 +464,7 @@ BOOST_PYTHON_MODULE(hoomd)
     export_ConstraintSphereGPU();
 //    export_ConstExternalFieldDipoleForceComputeGPU();
     export_PPPMForceComputeGPU();
-    export_PotentialExternalGPU<PotentialExternalPeriodicGPU, PotentialExternalPeriodic>("PotentialExternalPeriodicGPU");
+    export_PotentialExternalGPU<PotentialPeriodicExternalGPU, PotentialPeriodicExternal>("PotentialPeriodicExternalGPU");
 #endif
     
     // analyzers

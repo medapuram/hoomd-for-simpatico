@@ -54,11 +54,12 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define __ALL_EXTERNAL_POTENTIALS__H__
 
 #include "PotentialExternal.h"
-#include "EvaluatorExternalPeriodic.h"
+#include "EvaluatorPeriodicExternal.h"
+#include "EvaluatorLocalExternal.h"
 
 #ifdef ENABLE_CUDA
-#include "AllDriverPotentialExternalGPU.cuh"
 #include "PotentialExternalGPU.h"
+#include "AllDriverPotentialExternalGPU.cuh"
 #endif
 
 /*! \file AllExternalPotentials.h
@@ -70,11 +71,14 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 //! External potential to impose periodic structure
-typedef PotentialExternal<EvaluatorExternalPeriodic> PotentialExternalPeriodic;
+typedef PotentialExternal<EvaluatorPeriodicExternal> PotentialPeriodicExternal;
+
+typedef PotentialExternal<EvaluatorLocalExternal> PotentialLocalExternal;
 
 #ifdef ENABLE_CUDA
 //! External potential to impose periodic structure on the GPU
-typedef PotentialExternalGPU<EvaluatorExternalPeriodic, gpu_compute_periodic_forces> PotentialExternalPeriodicGPU;
+typedef PotentialExternalGPU<EvaluatorPeriodicExternal, gpu_compute_periodic_forces> PotentialPeriodicExternalGPU;
+typedef PotentialExternalGPU<EvaluatorLocalExternal, gpu_compute_local_forces> PotentialLocalExternalGPU;
 #endif
 
 #endif // __EXTERNAL_POTENTIALS_H__

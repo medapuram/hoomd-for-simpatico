@@ -44,7 +44,8 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <boost/shared_ptr.hpp>
 #include <boost/python.hpp>
 #include "ForceCompute.h"
-
+#include "PeriodicExternalParams.h"
+#include "LocalExternalParams.h"
 /*! \file PotentialExternal.h
     \brief Declares a class for computing an external force field
 */
@@ -219,7 +220,26 @@ void export_PotentialExternal(const std::string& name)
                   (name.c_str(), boost::python::init< boost::shared_ptr<SystemDefinition>, const std::string& >())
                   .def("setParams", &T::setParams)
                   ;
+    if (name == "PotentialPeriodicExternal") {
+    boost::python::class_<PeriodicExternalParams>("PeriodicExternalParams", boost::python::init<Scalar, int3, int3, int3,  Scalar, int>())
+        .def_readonly("order_parameter", &PeriodicExternalParams::order_parameter)
+        .def_readonly("lattice_vector_1", &PeriodicExternalParams::lattice_vector_1)
+        .def_readonly("lattice_vector_2", &PeriodicExternalParams::lattice_vector_2)
+        .def_readonly("lattice_vector_3", &PeriodicExternalParams::lattice_vector_3)
+        .def_readonly("interface_width", &PeriodicExternalParams::interface_width)
+        .def_readonly("periodicity", &PeriodicExternalParams::periodicity)
+        ;
     }
-
+    if (name == "PotentialLocalExternal") {
+    boost::python::class_<LocalExternalParams>("LocalExternalParams", boost::python::init<unsigned int, unsigned int, Scalar, Scalar, Scalar, int>())
+        .def_readonly("perp_index", &LocalExternalParams::perp_index)
+        .def_readonly("parallel_index", &LocalExternalParams::parallel_index)
+        .def_readonly("fraction_length", &LocalExternalParams::fraction_length)
+        .def_readonly("order_parameter", &LocalExternalParams::order_parameter)
+        .def_readonly("interface_width", &LocalExternalParams::interface_width)
+        .def_readonly("periodicity", &LocalExternalParams::periodicity)
+        ;
+    }
+    }
 #endif
 

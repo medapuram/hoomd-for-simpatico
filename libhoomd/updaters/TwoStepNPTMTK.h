@@ -151,6 +151,20 @@ class TwoStepNPTMTK : public IntegrationMethodTwoStep
             m_tauP = tauP;
             }
 
+        //! Set the initial state of the internal state variables
+        /*! \param etax momentum conjugate to box dimension in x direction
+            \param etay momentum conjugate to box dimension in y direction
+            \param etaz momentum conjugate to box dimension in x direction
+        */
+       void setEta(Scalar etax, Scalar etay, Scalar etaz)
+            {
+            IntegratorVariables v = getIntegratorVariables();
+            v.variable[2] = etax;
+            v.variable[5] = etay;
+            v.variable[7] = etaz;
+            setIntegratorVariables(v);
+            }
+
         //! Set the partial scale option
         /*! \param partial_scale New partial_scale option to set
         */

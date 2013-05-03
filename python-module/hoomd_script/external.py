@@ -314,20 +314,75 @@ class periodic(_external_force):
 
         # create the c++ mirror class
         if not globals.exec_conf.isCUDAEnabled():
-            self.cpp_force = hoomd.PotentialExternalPeriodic(globals.system_definition,self.name);
+            self.cpp_force = hoomd.PotentialPeriodicExternal(globals.system_definition,self.name);
         else:
-            self.cpp_force = hoomd.PotentialExternalPeriodicGPU(globals.system_definition,self.name);
+            self.cpp_force = hoomd.PotentialPeriodicExternalGPU(globals.system_definition,self.name);
 
         globals.system.addCompute(self.cpp_force, self.force_name);
 
-        # setup the coefficient options
-        self.required_coeffs = ['A','i','w','p'];
+        self.required_coeffs = ['orderParameters', 'latticeVectors', 'w','p'];
 
     def process_coeff(self, coeff):
-        A = coeff['A'];
-        i = coeff['i'];
+        orderParameter = coeff['orderParameter'];
+        latticeVector1 = coeff['latticeVector1'];
+        latticeVector2 = coeff['latticeVector2'];
+        latticeVector3 = coeff['latticeVector3'];
         w = coeff['w'];
         p = coeff['p'];
 
-        return hoomd.make_scalar4(hoomd.int_as_scalar(i), A, w, hoomd.int_as_scalar(p));
+        return hoomd.PeriodicExternalParams(orderParameters, latticeVectors, w, p);
 
+## One-dimension periodic potential
+#
+# The command %periodic specifies that an external %force should be
+# added to every particle in the simulation to induce a periodic modulation
+# in the particle concentration. The force parameters can be set on a per-particle
+# type-basis. The potential can e.g. be used to induce an ordered phase in a block-copolymer melt.
+#
+# The external potential \f$V(\vec{r}) \f$ is implemented using the following formula:
+#
+#    \f[
+#    V(\vec{r}) = A * \tanh\left[\frac{1}{2 \pi p w} \cos\left(p \vec{b}_i\cdot\vec{r}\right)\right]
+#    \f]
+#
+#    where \f$A\f$ is the ordering parameter, \f$\vec{b}_i\f$ is the reciprocal lattice vector direction
+#    \f$i=0..2\f$, \f$p\f$ the periodicity and \f$w\f$ the interface width
+#    (relative to the distance \f$2\pi/|\mathbf{b_i}|\f$ between planes in the \f$i\f$-direction).
+#    The modulation is one-dimensional. It extends along the lattice vector \f$\mathbf{a}_i\f$ of the
+#    simulation cell.
+class local(_external_force):
+    ## Apply a force derived from a %periodic potential to all particles
+    #
+    # \b Examples:
+    # \code
+    # # Apply a periodic composition modulation along the first lattice vector
+    # periodic = external.periodic()
+    # periodic.force_coeff.set('A', A=1.0, i=0, w=0.02, p=3)
+    # periodic.force_coeff.set('B', A=-1.0, i=0, w=0.02, p=3)
+    # \endcode
+
+    def __init__(self, name=""):
+        util.print_status_line();
+
+        # initialize the base class
+        _external_force.__init__(self, name);
+
+        # create the c++ mirror class
+        if not globals.exec_conf.isCUDAEnabled():
+            self.cpp_force = hoomd.PotentialLocalExternal(globals.system_definition,self.name);
+        else:
+            self.cpp_force = hoomd.PotentialLocalExternalGPU(globals.system_definition,self.name);
+
+        globals.system.addCompute(self.cpp_force, self.force_name);
+
+        self.required_coeffs = ['perpIndex', 'parallelIndex', 'fraction','A','w','p'];
+
+    def process_coeff(self, coeff):
+        perpIndex = coeff['perpIndex'];
+        parallelIndex = coeff['parallelIndex'];
+        fraction = coeff['fraction'];
+        A = coeff['A'];
+        w = coeff['w'];
+        p = coeff['p'];
+
+        return hoomd.LocalExternalParams(perpIndex, parallelIndex, fraction, A, w, p);

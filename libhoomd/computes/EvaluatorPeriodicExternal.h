@@ -133,35 +133,79 @@ class EvaluatorPeriodicExternal
 
             Scalar cosine = Scalar(0.0);
             Scalar3 deriv = make_scalar3(0.0,0.0,0.0);
-            Scalar clip_parameter = Scalar(1.0)/(Scalar(2.0*M_PI)*m_interface_width*m_periodicity);
-
-            Scalar3 q1 = make_scalar3(2.0*M_PI*m_lattice_vector_1.x/L.x,
+            Scalar3 qr_1 = make_scalar3(2.0*M_PI*m_lattice_vector_1.x,
+                                      2.0*M_PI*m_lattice_vector_1.y,
+                                      2.0*M_PI*m_lattice_vector_1.z);
+            Scalar3 qr_2 = make_scalar3(2.0*M_PI*m_lattice_vector_2.x,
+                                      2.0*M_PI*m_lattice_vector_2.y,
+                                      2.0*M_PI*m_lattice_vector_2.z);
+            Scalar3 qr_3 = make_scalar3(2.0*M_PI*m_lattice_vector_3.x,
+                                      2.0*M_PI*m_lattice_vector_3.y,
+                                      2.0*M_PI*m_lattice_vector_3.z);
+            Scalar3 q_1 = make_scalar3(2.0*M_PI*m_lattice_vector_1.x/L.x,
                                       2.0*M_PI*m_lattice_vector_1.y/L.y,
                                       2.0*M_PI*m_lattice_vector_1.z/L.z);
-            Scalar3 q2 = make_scalar3(2.0*M_PI*m_lattice_vector_2.x/L.x,
+            Scalar3 q_2 = make_scalar3(2.0*M_PI*m_lattice_vector_2.x/L.x,
                                       2.0*M_PI*m_lattice_vector_2.y/L.y,
                                       2.0*M_PI*m_lattice_vector_2.z/L.z);
-            Scalar3 q3 = make_scalar3(2.0*M_PI*m_lattice_vector_3.x/L.x,
+            Scalar3 q_3 = make_scalar3(2.0*M_PI*m_lattice_vector_3.x/L.x,
                                       2.0*M_PI*m_lattice_vector_3.y/L.y,
                                       2.0*M_PI*m_lattice_vector_3.z/L.z);
-            Scalar arg1, sine1, arg2, sine2, arg3, sine3;
-            arg1 = dot(m_pos, q1);
-            arg2 = dot(m_pos, q2);
-            arg3 = dot(m_pos, q3);
-            sine1 = -1.0*sinf(arg1);
-            sine2 = -1.0*sinf(arg2);
-            sine3 = -1.0*sinf(arg3);
-
-            deriv = deriv + sine1*q1 + sine2*q2 + sine3*q3;
-            cosine = cosf(arg1) + cosf(arg2) + cosf(arg3);
-            cosine *= clip_parameter;
-            deriv *= clip_parameter;
+            Scalar arg_1, q_lengths_1, clip_parameter_1, sine_1;
+            Scalar arg_2, q_lengths_2, clip_parameter_2, sine_2;
+            Scalar arg_3, q_lengths_3, clip_parameter_3, sine_3;
+            arg_1 = dot(m_pos, qr_1);
+            arg_2 = dot(m_pos, qr_2);
+            arg_3 = dot(m_pos, qr_3);
+            q_lengths_1 = dot(q_1, L);
+            q_lengths_2 = dot(q_2, L);
+            q_lengths_3 = dot(q_3, L);
+            if (m_lattice_vector_1.x != 0 || m_lattice_vector_1.y != 0 || m_lattice_vector_1.z != 0) {
+                clip_parameter_1 = Scalar(1.0)/(m_interface_width*q_lengths_1);
+            } else {
+                clip_parameter_1 = 0.0;
+            }
+            if (m_lattice_vector_2.x != 0 || m_lattice_vector_2.y != 0 || m_lattice_vector_2.z != 0) {
+                clip_parameter_2 = Scalar(1.0)/(m_interface_width*q_lengths_2);
+            } else {
+                clip_parameter_2 = 0.0;
+            }
+            if (m_lattice_vector_3.x != 0 || m_lattice_vector_3.y != 0 || m_lattice_vector_3.z != 0) {
+                clip_parameter_3 = Scalar(1.0)/(m_interface_width*q_lengths_3);
+            } else {
+                clip_parameter_3 = 0.0;
+            }
+            cosine = clip_parameter_1*cosf(arg_1) + clip_parameter_2*cosf(arg_2) + clip_parameter_3*cosf(arg_3);
             Scalar tanH = tanhf(cosine);
             energy = m_order_parameter*tanH;
 
-            Scalar sechSq = (1.0 - tanH*tanH);
+            sine_1 = -Scalar(1.0)*clip_parameter_1*sinf(arg_1);
+            sine_2 = -Scalar(1.0)*clip_parameter_2*sinf(arg_2);
+            sine_3 = -Scalar(1.0)*clip_parameter_3*sinf(arg_3);
+            deriv = deriv + sine_1*q_1 + sine_2*q_2 + sine_3*q_3;
+            Scalar sechSq = (Scalar(1.0) - tanH*tanH);
             Scalar f = m_order_parameter*sechSq;
             F = f*deriv;
+            //#if (__CUDA_ARCH__ >= 200 || !defined(NVCC))
+            /*
+            #ifndef NVCC
+            int n = 0;
+            if (n == 0) {
+            printf("pos is %f\n", m_pos.x);
+            printf("length is %f\n", L.x);
+            printf("clip is %f\n", clip_parameter);
+            printf("arg1 is %f\n", arg1);
+            printf("arg2 is %f\n", arg2);
+            printf("arg3 is %f\n", arg3);
+            printf("sine1 is %f\n", sine1);
+            printf("sine2 is %f\n", sine2);
+            printf("sine3 is %f\n", sine3);
+            printf("cosine is %f\n", cosf(arg1));
+            printf("cosine*clip is %f\n", clip_parameter*cosf(arg1));
+            }
+            ++n;
+            #endif
+            */
             }
 
         #ifndef NVCC

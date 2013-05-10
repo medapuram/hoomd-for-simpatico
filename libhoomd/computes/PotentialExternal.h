@@ -152,6 +152,7 @@ void PotentialExternal<evaluator>::computeForces(unsigned int timestep)
     ArrayHandle<param_type> h_params(m_params, access_location::host, access_mode::read);
 
     const BoxDim& box = m_pdata->getGlobalBox();
+    Scalar3 L = box.getL();
 
     unsigned int nparticles = m_pdata->getN();
 
@@ -167,7 +168,7 @@ void PotentialExternal<evaluator>::computeForces(unsigned int timestep)
     for (unsigned int idx = 0; idx < nparticles; idx++)
         {
         // get the current particle properties
-        Scalar3 X = make_scalar3(h_pos.data[idx].x, h_pos.data[idx].y, h_pos.data[idx].z);
+        Scalar3 X = make_scalar3((h_pos.data[idx].x + (L.x/Scalar(2.0)))/(L.x), (h_pos.data[idx].y + (L.y/Scalar(2.0)))/(L.y), (h_pos.data[idx].z + (L.z/Scalar(2.0)))/(L.z));
         unsigned int type = __scalar_as_int(h_pos.data[idx].w);
         Scalar3 F;
         Scalar energy;

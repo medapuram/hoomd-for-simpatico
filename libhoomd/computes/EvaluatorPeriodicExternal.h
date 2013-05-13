@@ -186,26 +186,24 @@ class EvaluatorPeriodicExternal
             Scalar sechSq = (Scalar(1.0) - tanH*tanH);
             Scalar f = m_order_parameter*sechSq;
             F = f*deriv;
-            //#if (__CUDA_ARCH__ >= 200 || !defined(NVCC))
-            /*
-            #ifndef NVCC
             int n = 0;
+            #if (__CUDA_ARCH__ >= 200 || !defined(NVCC))
+            //#ifndef NVCC
             if (n == 0) {
             printf("pos is %f\n", m_pos.x);
             printf("length is %f\n", L.x);
-            printf("clip is %f\n", clip_parameter);
-            printf("arg1 is %f\n", arg1);
-            printf("arg2 is %f\n", arg2);
-            printf("arg3 is %f\n", arg3);
-            printf("sine1 is %f\n", sine1);
-            printf("sine2 is %f\n", sine2);
-            printf("sine3 is %f\n", sine3);
-            printf("cosine is %f\n", cosf(arg1));
-            printf("cosine*clip is %f\n", clip_parameter*cosf(arg1));
+            printf("clip is %f\n", clip_parameter_1);
+            printf("arg1 is %f\n", arg_1);
+            printf("arg2 is %f\n", arg_2);
+            printf("arg3 is %f\n", arg_3);
+            printf("sine1 is %f\n", sine_1);
+            printf("sine2 is %f\n", sine_2);
+            printf("sine3 is %f\n", sine_3);
+            printf("cosine is %f\n", cosf(arg_1));
+            printf("cosine*clip is %f\n", clip_parameter_1*cosf(arg_1));
             }
-            ++n;
             #endif
-            */
+            ++n;
             }
 
         #ifndef NVCC

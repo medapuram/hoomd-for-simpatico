@@ -119,6 +119,7 @@ __global__ void gpu_compute_external_forces_kernel(float4 *d_force,
                                                const BoxDim box,
                                                const typename evaluator::param_type *params)
     {
+    float3 L = box.getL();
     // start by identifying which particle we are to handle
     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -137,7 +138,7 @@ __global__ void gpu_compute_external_forces_kernel(float4 *d_force,
     float energy = 0.0f;
 
     unsigned int typei = __float_as_int(posi.w);
-    float3 Xi = make_float3(posi.x, posi.y, posi.z);
+    float3 Xi = make_float3((posi.x + L.x/(2.0f))/(L.x), (posi.y + L.y/(2.0f))/(L.y), (posi.z + L.z/(2.0f))/(L.z));
     evaluator eval(Xi, box, params[typei]);
 
     eval.evalForceEnergyAndVirial(force, energy, virial);

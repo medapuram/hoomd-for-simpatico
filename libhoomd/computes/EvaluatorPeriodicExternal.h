@@ -194,13 +194,11 @@ class EvaluatorPeriodicExternal
             printf("length is %f\n", L.x);
             printf("clip is %f\n", clip_parameter_1);
             printf("arg1 is %f\n", arg_1);
-            printf("arg2 is %f\n", arg_2);
-            printf("arg3 is %f\n", arg_3);
             printf("sine1 is %f\n", sine_1);
-            printf("sine2 is %f\n", sine_2);
-            printf("sine3 is %f\n", sine_3);
-            printf("cosine is %f\n", cosf(arg_1));
-            printf("cosine*clip is %f\n", clip_parameter_1*cosf(arg_1));
+            printf("energy is %f\n", energy);
+            printf("forcex is %f\n", F.x);
+            printf("forcey is %f\n", F.y);
+            printf("forcez is %f\n", F.z);
             }
             #endif
             ++n;

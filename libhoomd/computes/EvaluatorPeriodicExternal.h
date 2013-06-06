@@ -134,23 +134,23 @@ class EvaluatorPeriodicExternal
             Scalar cosine = Scalar(0.0);
             Scalar3 deriv = make_scalar3(0.0,0.0,0.0);
             Scalar3 qr_1 = make_scalar3(2.0*M_PI*m_lattice_vector_1.x,
-                                      2.0*M_PI*m_lattice_vector_1.y,
-                                      2.0*M_PI*m_lattice_vector_1.z);
+                                        2.0*M_PI*m_lattice_vector_1.y,
+                                        2.0*M_PI*m_lattice_vector_1.z);
             Scalar3 qr_2 = make_scalar3(2.0*M_PI*m_lattice_vector_2.x,
-                                      2.0*M_PI*m_lattice_vector_2.y,
-                                      2.0*M_PI*m_lattice_vector_2.z);
+                                        2.0*M_PI*m_lattice_vector_2.y,
+                                        2.0*M_PI*m_lattice_vector_2.z);
             Scalar3 qr_3 = make_scalar3(2.0*M_PI*m_lattice_vector_3.x,
-                                      2.0*M_PI*m_lattice_vector_3.y,
-                                      2.0*M_PI*m_lattice_vector_3.z);
+                                        2.0*M_PI*m_lattice_vector_3.y,
+                                        2.0*M_PI*m_lattice_vector_3.z);
             Scalar3 q_1 = make_scalar3(2.0*M_PI*m_lattice_vector_1.x/L.x,
-                                      2.0*M_PI*m_lattice_vector_1.y/L.y,
-                                      2.0*M_PI*m_lattice_vector_1.z/L.z);
+                                       2.0*M_PI*m_lattice_vector_1.y/L.y,
+                                       2.0*M_PI*m_lattice_vector_1.z/L.z);
             Scalar3 q_2 = make_scalar3(2.0*M_PI*m_lattice_vector_2.x/L.x,
-                                      2.0*M_PI*m_lattice_vector_2.y/L.y,
-                                      2.0*M_PI*m_lattice_vector_2.z/L.z);
+                                       2.0*M_PI*m_lattice_vector_2.y/L.y,
+                                       2.0*M_PI*m_lattice_vector_2.z/L.z);
             Scalar3 q_3 = make_scalar3(2.0*M_PI*m_lattice_vector_3.x/L.x,
-                                      2.0*M_PI*m_lattice_vector_3.y/L.y,
-                                      2.0*M_PI*m_lattice_vector_3.z/L.z);
+                                       2.0*M_PI*m_lattice_vector_3.y/L.y,
+                                       2.0*M_PI*m_lattice_vector_3.z/L.z);
             Scalar arg_1, q_lengths_1, clip_parameter_1, sine_1;
             Scalar arg_2, q_lengths_2, clip_parameter_2, sine_2;
             Scalar arg_3, q_lengths_3, clip_parameter_3, sine_3;
